@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  
+  <title>Frontend Mentor | QR code component</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+      }
+      body {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: rgb(207, 219, 236);
+      }
+      .card {
+          background: white;
+          border-radius: 15px;
+          padding: 20px;
+          width: 320px;
+          text-align: center;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .qr-image {
+          width: 100%;
+          border-radius: 10px;
+      }
+      .card-content {
+          padding: 20px 10px;
+      }
+      .card-content h2 {
+          font-size: 20px;
+          font-weight: bold;
+          color: #2d3436;
+          margin-bottom: 20px;
+      }
+      .card-content p {
+          font-size: 15px;
+          color: #636e72;
+      }
+      @media (min-width: 768px) {
+          .card {
+              width: 350px;
+          }
+          .card-content h2 {
+              font-size: 22px;
+          }
+          .card-content p {
+              font-size: 17px;
+          }
+      }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <img src="images/image-qr-code.png" alt="QR Code" class="qr-image">
+    <div class="card-content">
+        <h2>Improve your front-end skills by building projects</h2>
+        <p>Scan the QR code to visit Frontend Mentor and take your coding skills to the next level</p>
+    </div>
+</div>
+</body>
+</html>
