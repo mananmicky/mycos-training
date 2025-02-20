@@ -6,7 +6,7 @@
 
   <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
   
-  <title>Frontend Mentor | QR code component</title>
+  <title>Hi - Lo Game</title>
 
   <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
   <style>
@@ -70,17 +70,19 @@
             border: 1px solid orange;
             color: white;
         }
-        #btnRoll {
-            width: 103px;
+        .btnGlobal {
+            width: 250px;
+            height: 50px;
             cursor: pointer;
             padding: 10px 20px;
-            background-color: #a41bff;
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             transition: transform 0.2s ease;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        #btnRoll {
+            background-color: #a41bff;
         }
         #btnRoll:hover, #btnClear:hover {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -88,19 +90,6 @@
         #btnRoll:active, #btnClear:active {
             transform: scale(1.1);  /* Scales the button up when clicked */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-        #btnClear {
-            width: 103px;
-            cursor: pointer;
-            padding: 10px 20px;
-            background-color: #ff891b;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-left: 10px;
         }
         .result-section {
             background-color: #00ff80; /* Light grey background */
@@ -118,6 +107,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 10px;
+            padding-bottom: 15px;
             font-size: 20px;
         }
         #gif-section {
@@ -126,7 +116,6 @@
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
             color: white;
             font-weight: bolder;
         }
@@ -134,6 +123,23 @@
             display: none; 
             width: 290px; 
             padding-top: 10px;
+        }
+        #loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 70%;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        #loading img {
+            width: 150px;
+            height: auto;
         }
         .rainbow {
             text-align: center;
@@ -164,15 +170,17 @@
         <h2>👾<span class="rainbow rainbow_text_animated">Hi-Lo Game</span>👾</h2>
         <br />
         <div class="game-section">
-            <input type="number" id="betAmount" placeholder="Enter bet amount" autofocus oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
+            <input type="number" id="betAmount" placeholder="B E T   A M O U N T" autofocus oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
             <br />
             <div class="bet-options">
-                <button id="betHigh" onclick="placeBet('high', this)">BET High</button>
-                <button id="betMid" onclick="placeBet('mid', this)">BET Mid</button>
-                <button id="betLow" onclick="placeBet('low', this)">BET Low</button>
+                <button id="betHigh" onclick="placeBet('high', this)">H I G H</button>
+                <button id="betMid" onclick="placeBet('mid', this)">M I D</button>
+                <button id="betLow" onclick="placeBet('low', this)">L O W</button>
             </div>
-            <button id="btnRoll" onclick="rollDice()">Roll Dice</button>
-            <button id="btnClear" onclick="clearValue()">Clear</button>
+            <button id="btnRoll" class="btnGlobal" onclick="rollDice()"><b>P L A Y !</b></button>
+            <div id="loading">
+                <img src="https://kcdd77098.wordpress.com/wp-content/uploads/2019/02/dice_animaion_gif1.gif" alt="Loading..." />
+            </div>
             <br /><br />
             <div class="result-section">
                 <div class="dices">
@@ -182,7 +190,6 @@
                     <span id="dice2" class="dice"> - </span>
                     🎲
                     <span id="dice3" class="dice"> - </span>
-                    <div id="total" style="padding: 10px; font-size: 15px; font-weight: bold;"></div>
                 </div>
                 <div id="gif-section">
                     <p id="result">_</p>
@@ -199,6 +206,7 @@
     <script>
         let betType = "";
         let betAmount = 0;
+        let loadingTime = 1000;
 
         function placeBet(type, button) {
             betType = type;
@@ -220,61 +228,51 @@
                 return;
             }
 
-            let dice1 = Math.floor(Math.random() * 6) + 1;
-            let dice2 = Math.floor(Math.random() * 6) + 1;
-            let dice3 = Math.floor(Math.random() * 6) + 1;
-            let sum = dice1 + dice2 + dice3;
+            loading();
 
-            document.getElementById("dice1").innerHTML = dice1;
-            document.getElementById("dice2").innerHTML = dice2;
-            document.getElementById("dice3").innerHTML = dice3;
-            document.getElementById("total").innerText = `Rolled ${sum}`;
+            setTimeout(function() {
+                let dice1 = Math.floor(Math.random() * 6) + 1;
+                let dice2 = Math.floor(Math.random() * 6) + 1;
+                let dice3 = Math.floor(Math.random() * 6) + 1;
+                let sum = dice1 + dice2 + dice3;
 
-            let resultMessage = "";
-            let winnings = 0;
-            
-            if (betType === "high" && sum >= 12) {
-                winnings = betAmount * 2;
-                document.getElementById("celebrateGif").style.display = 'block';
-                document.getElementById("gif-section").style.background = "red";
-            } else if (betType === "mid" && sum === 11) {
-                winnings = betAmount * 5;
-                resultMessage += "Jackpot 5x!🎉";
-                document.getElementById("moneyGif").style.display = 'block';
-                document.getElementById("gif-section").style.background = "linear-gradient(in hsl longer hue 45deg, red 0 0)";
-            } else if (betType === "low" && sum <= 10) {
-                winnings = betAmount * 2;
-                document.getElementById("celebrateGif").style.display = 'block';
-                document.getElementById("gif-section").style.background = "red";
-            } else {
-                resultMessage += "You lost!😵‍💫 \r\n";
-                document.getElementById("gif-section").style.background = "rgb(32, 121, 255)";
-                randomLostGif();
-            }
+                document.getElementById("dice1").innerHTML = dice1;
+                document.getElementById("dice2").innerHTML = dice2;
+                document.getElementById("dice3").innerHTML = dice3;
 
-            if (winnings > 0) {
-                resultMessage += ` You won ${winnings} coins!💰🏆`;
-            }
+                let resultMessage = "";
+                let winnings = 0;
+                
+                if (betType === "high" && sum >= 12) {
+                    winnings = betAmount * 2;
+                    document.getElementById("celebrateGif").style.display = 'block';
+                    document.getElementById("gif-section").style.background = "red";
+                } else if (betType === "mid" && sum === 11) {
+                    winnings = betAmount * 5;
+                    resultMessage += "J A C K P O T 5x ! 🎉<br />";
+                    document.getElementById("moneyGif").style.display = 'block';
+                    document.getElementById("gif-section").style.background = "linear-gradient(in hsl longer hue 45deg, red 0 0)";
+                } else if (betType === "low" && sum <= 10) {
+                    winnings = betAmount * 2;
+                    document.getElementById("celebrateGif").style.display = 'block';
+                    document.getElementById("gif-section").style.background = "red";
+                } else {
+                    resultMessage += "Y O U&nbsp;&nbsp;&nbsp;L O S T ! 😵‍💫 \r\n";
+                    document.getElementById("gif-section").style.background = "rgb(32, 121, 255)";
+                    randomLostGif();
+                }
 
-            document.getElementById("result").innerText = resultMessage;
-        }
+                if (winnings > 0) {
+                    resultMessage += ` Y O U&nbsp;&nbsp;&nbsp;W O N&nbsp;&nbsp;${winnings}&nbsp;&nbsp;C O I N !💰🏆`;
+                }
 
-        function clearValue() {
-            betType = "";
-            betAmount = 0;
-            document.querySelectorAll(".bet-options button").forEach(btn => btn.classList.remove("active"));
-            document.getElementById('betAmount').value = null;
-            document.getElementById('betAmount').focus();
-            document.getElementById("dice1").innerHTML = "-";
-            document.getElementById("dice2").innerHTML = "-";
-            document.getElementById("dice3").innerHTML = "-";
-            document.getElementById("total").innerText = "";
-            document.getElementById("result").innerText = "";
-            document.getElementById("gif-section").style.background = "rgb(32, 121, 255)";
-            clearGif();
+                document.getElementById("result").innerHTML = resultMessage;
+            }, loadingTime);
         }
 
         function clearGif() {
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("gif-section").style.background = "rgb(32, 121, 255)";
             let elements = document.getElementsByClassName("imgGif");
             for (let i = 0; i < elements.length; i++) {
                 elements[i].style.display = "none";
@@ -289,6 +287,14 @@
                 lostGifImages.forEach(img => img.style.display = 'none');
                 lostGifImages[randomIndex].style.display = 'block';
             }
+        }
+
+        function loading() {
+            var loadingGif = document.getElementById("loading");
+            loadingGif.style.display = "flex";
+            setTimeout(function() {
+                loadingGif.style.display = "none";
+            }, loadingTime);
         }
     </script>
 </body>
